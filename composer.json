@@ -1,0 +1,16 @@
+{
+    "name": "steevembr1/test",
+    "description": "Test of Entity and EntityManager Modeling",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "SteeveMbr1",
+            "email": "steeve.mombrun@outlook.com"
+        }
+    ],
+    "require": {}
+}
