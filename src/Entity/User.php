@@ -4,20 +4,14 @@ namespace App\Entity;
 
 class User extends Entity {
 
-    protected ?string $login = '';
-    protected ?string $password = '';
+    protected string $login;
+    protected string $password;
+    protected array $fields = [
+        'id',
+        'login',
+        'password'
+    ];
 
-    /**
-     * Undocumented function
-     *
-     * @param integer|null $id
-     * @param string|null $login
-     * @param string|null $password
-     */
-    public function __construct(protected int $id = -1)
-    {
-        parent::__construct($id);
-    }
 
     /**
      * Get the value of login

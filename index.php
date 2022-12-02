@@ -1,17 +1,35 @@
 <?php
 
-use App\Entity\Entity;
+
 use App\Entity\User;
 use App\EntityManager\EntityManager;
+use App\Database\DBConnexion;
 
 require './vendor/autoload.php';
 
 
-$user = new User(1);
 
 
+$em = new EntityManager(DBConnexion::getConnexion());
+
+
+
+$user = new User();
 $user->setLogin('admin')
-     ->setPassword('p@ss');
+     ->setPassword('P@ssWord');
 
-     
-var_dump (EntityManager::find($user));
+
+// CREATE new user in DB
+$em->save($user);
+
+
+// READ user in DB
+$user = $em->findById(User::class, 1);
+
+
+// UPDATE user in DB
+$em->save($user);
+
+
+// DELETE
+$em->remove($user);

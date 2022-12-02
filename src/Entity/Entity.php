@@ -4,18 +4,17 @@ namespace App\Entity;
 
 class Entity {
 
-    /**
-     * Undocumented function
-     *
-     * @param integer $id
-     * @param string $table
-     */
-    public function __construct(protected int $id = -1, protected string $table = '')
+    protected string $table;
+    protected array $fields = [];
+
+    public function __construct(protected int $id = 0)
     {
-        $this->table = array_slice(explode('\\', $this::class), -1)[0];
+        $this->generateTableName();
     }
 
-    
+    protected function generateTableName() {
+        $this->table = array_slice(explode('\\', $this::class), -1)[0];
+    }
 
     /**
      * Get the value of id
@@ -51,5 +50,35 @@ class Entity {
         $this->table = $table;
 
         return $this;
+    }
+
+    /**
+     * Get the value of fields
+     *
+     * @return array
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+    /**
+     * Set the value of fields
+     *
+     * @param array $fields
+     *
+     * @return self
+     */
+    public function setFields(array $fields): self
+    {
+        $this->fields = $fields;
+
+        return $this;
+    }
+
+    public function __get($name)
+    {
+        $prop = 'get'.ucfirst($name);
+        return $this->$prop();
     }
 }
