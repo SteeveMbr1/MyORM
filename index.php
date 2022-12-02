@@ -4,6 +4,7 @@
 use App\Entity\User;
 use App\EntityManager\EntityManager;
 use App\Database\DBConnexion;
+use App\Entity\Post;
 
 require './vendor/autoload.php';
 
@@ -14,22 +15,31 @@ $em = new EntityManager(DBConnexion::getConnexion());
 
 
 
-$user = new User();
-$user->setLogin('admin')
-     ->setPassword('P@ssWord');
+$post = new Post();
+$post->setName('First post')
+     ->setContent('Here is the content')
+     ->setCreatedAt((new DateTime())->format(DateTime::RFC7231))
+     ->setIsOnline(false);
 
 
-// CREATE new user in DB
-$em->save($user);
+// CREATE new post in DB
+// $em->save($post);
 
 
-// READ user in DB
-$user = $em->findById(User::class, 1);
 
+// READ post in DB
+$post = $em->findById(Post::class, 3);
+$post->setName('I change my mind')
+     ->setContent('Here why it\'s append')
+     ->setCreatedAt((new DateTime())->format(DateTime::RFC7231))
+     ->setIsOnline(true);
 
-// UPDATE user in DB
-$em->save($user);
+// UPDATE post in DB
+$em->save($post);
+
+var_dump($post);
+die;
 
 
 // DELETE
-$em->remove($user);
+$em->remove($post);

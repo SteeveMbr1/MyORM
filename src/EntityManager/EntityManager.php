@@ -9,6 +9,10 @@ class EntityManager
 {
 
 
+    /**
+     * @param PDO $conn 
+     * @return void 
+     */
     public function __construct(public PDO $conn)
     {
     }
@@ -33,6 +37,7 @@ class EntityManager
         $fields = rtrim($fields, ', ');
         $values = rtrim($values, ', ');
         $query = "INSERT INTO {$entity->getTable()} ($fields) VALUES ($values)";
+
         $this->conn->exec($query);
         return $entity->setId($this->conn->lastInsertId());
     }
@@ -51,16 +56,19 @@ class EntityManager
         return $entity->setId($this->conn->lastInsertId());
     }
 
-    public function findById(string $className, int $id): Entity
+    public function findById(string $className, int $id): Entity | bool
     {
         $entity = new $className();
         $query = "SELECT * FROM {$entity->getTable()} WHERE id = :id";
         $stm = $this->conn->prepare($query);
         $stm->setFetchMode(PDO::FETCH_CLASS, $className);
         $stm->execute(['id' => $id]);
-        $res = $stm->fetchAll();
-        var_dump($res);
-        return $entity;
+        return $stm->fetch();
+    }
+
+    public function findOn()
+    {
+        # code...
     }
 
     public function remove(Entity $entity): bool|int

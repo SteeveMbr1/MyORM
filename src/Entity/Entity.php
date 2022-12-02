@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-class Entity {
+class Entity
+{
 
     protected string $table;
     protected array $fields = [];
@@ -12,7 +13,8 @@ class Entity {
         $this->generateTableName();
     }
 
-    protected function generateTableName() {
+    protected function generateTableName()
+    {
         $this->table = array_slice(explode('\\', $this::class), -1)[0];
     }
 
@@ -76,9 +78,14 @@ class Entity {
         return $this;
     }
 
+    private function to_camel_case(string $word)
+    {
+        return str_replace('_', '', ucwords($word, '_'));
+    }
+
     public function __get($name)
     {
-        $prop = 'get'.ucfirst($name);
+        $prop = 'get' . $this->to_camel_case($name);
         return $this->$prop();
     }
 }
