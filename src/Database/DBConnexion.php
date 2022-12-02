@@ -1,22 +1,24 @@
 <?php
 
 namespace App\Database;
+
 use PDO;
 
 
-class DBConnexion {
+class DBConnexion
+{
 
     static protected PDO $conn;
-    
+
+    /** @return void  */
     public function __construct()
     {
         self::$conn = new PDO("sqlite:src/Database/store.db");
     }
 
-    static public function getConnexion() : PDO
+    static public function getConnexion(): PDO
     {
         new static();
         return self::$conn;
     }
-
 }
