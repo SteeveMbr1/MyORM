@@ -5,25 +5,28 @@ namespace App\EntityManager;
 use App\Entity\Entity;
 use PDO;
 
-class EntityManager {
+class EntityManager
+{
 
-    
-    public function __construct(public PDO $conn) {}
 
-    public function save(Entity $entity) : Entity|null
+    public function __construct(public PDO $conn)
+    {
+    }
+
+    public function save(Entity $entity): Entity|null
     {
         if (!$entity->getId())
             return $this->create($entity);
         return $this->update($entity);
     }
 
-    private function create(Entity $entity) : Entity
+    private function create(Entity $entity): Entity
     {
         $values = "";
         $fields = "";
         foreach ($entity->getFields() as $field) {
             if ($field == 'id')
-            continue;
+                continue;
             $fields .= "'$field', ";
             $values .= "'{$entity->$field}', ";
         }
@@ -34,12 +37,12 @@ class EntityManager {
         return $entity->setId($this->conn->lastInsertId());
     }
 
-    private function update(Entity $entity) : Entity
+    private function update(Entity $entity): Entity
     {
         $set = "";
         foreach ($entity->getFields() as $field) {
             if ($field == 'id')
-            continue;
+                continue;
             $set .= "\"$field\" = \"{$entity->$field}\", ";
         }
         $set = rtrim($set, ', ');
@@ -48,7 +51,7 @@ class EntityManager {
         return $entity->setId($this->conn->lastInsertId());
     }
 
-    public function findById(string $className, int $id) : Entity
+    public function findById(string $className, int $id): Entity
     {
         $entity = new $className();
         $query = "SELECT * FROM {$entity->getTable()} WHERE id = :id";
@@ -60,10 +63,9 @@ class EntityManager {
         return $entity;
     }
 
-    public function remove(Entity $entity) : bool|int
+    public function remove(Entity $entity): bool|int
     {
         $query = "DELET FROM {$entity->getTable()} WHERE id = {$entity->getId()}";
         return $this->conn->exec($query);
     }
-    
 }
