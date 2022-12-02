@@ -2,7 +2,8 @@
 
 namespace App\Entity;
 
-class User extends Entity {
+class User extends Entity
+{
 
     protected string $login;
     protected string $password;
