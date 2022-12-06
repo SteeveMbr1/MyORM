@@ -4,18 +4,10 @@ namespace App\Entity;
 
 class Post extends Entity
 {
-    protected string $name;
-    protected string $content;
-    protected string $created_at;
-    protected bool   $is_online;
-
-    protected array  $fields = [
-        'id',
-        'name',
-        'content',
-        'created_at',
-        'is_online',
-    ];
+    public string $name;
+    public string $content;
+    public string $created_at;
+    public bool   $is_online;
 
     /**
      * Get the value of name

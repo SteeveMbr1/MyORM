@@ -21,7 +21,14 @@ $post->setName('First post')
      ->setCreatedAt((new DateTime())->format(DateTime::RFC7231))
      ->setIsOnline(false);
 
+$user = new User();
+$user->setLogin('log in')
+     ->setPassword('My passWord');
 
+
+var_dump($post->getModelFields());
+var_dump($user->getModelFields());
+die;
 // CREATE new post in DB
 // $em->save($post);
 

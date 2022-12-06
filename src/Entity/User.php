@@ -4,28 +4,27 @@ namespace App\Entity;
 
 class User extends Entity
 {
-
-    protected string $login;
-    protected string $password;
-    protected array $fields = [
-        'id',
-        'login',
-        'password'
-    ];
-
+    public string $login;
+    public string $password;
 
     /**
      * Get the value of login
+     *
+     * @return string
      */
-    public function getLogin()
+    public function getLogin(): string
     {
         return $this->login;
     }
 
     /**
      * Set the value of login
+     *
+     * @param string $login
+     *
+     * @return self
      */
-    public function setLogin($login): self
+    public function setLogin(string $login): self
     {
         $this->login = $login;
 
@@ -34,16 +33,22 @@ class User extends Entity
 
     /**
      * Get the value of password
+     *
+     * @return string
      */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
     /**
      * Set the value of password
+     *
+     * @param string $password
+     *
+     * @return self
      */
-    public function setPassword($password): self
+    public function setPassword(string $password): self
     {
         $this->password = $password;
 

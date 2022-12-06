@@ -19,41 +19,28 @@ class EntityManager
 
     public function save(Entity $entity): Entity|null
     {
-        if (!$entity->getId())
+        if (!$entity->id)
             return $this->create($entity);
         return $this->update($entity);
     }
 
     private function create(Entity $entity): Entity
     {
-        $values = "";
-        $fields = "";
-        foreach ($entity->getFields() as $field) {
-            if ($field == 'id')
-                continue;
-            $fields .= "'$field', ";
-            $values .= "'{$entity->$field}', ";
-        }
-        $fields = rtrim($fields, ', ');
-        $values = rtrim($values, ', ');
+        // TODO : 
         $query = "INSERT INTO {$entity->getTable()} ($fields) VALUES ($values)";
 
         $this->conn->exec($query);
-        return $entity->setId($this->conn->lastInsertId());
+        $entity->id = $this->conn->lastInsertId();
+        return $entity;
     }
 
     private function update(Entity $entity): Entity
     {
-        $set = "";
-        foreach ($entity->getFields() as $field) {
-            if ($field == 'id')
-                continue;
-            $set .= "\"$field\" = \"{$entity->$field}\", ";
-        }
-        $set = rtrim($set, ', ');
-        $query = "UPDATE {$entity->getTable()} SET $set WHERE id = {$entity->getId()}";
+        // TODO :
+        $query = "UPDATE {$entity->getTable()} SET ($field = $value) WHERE id = {$entity->id}";
         $this->conn->exec($query);
-        return $entity->setId($this->conn->lastInsertId());
+        $entity->id = $this->conn->lastInsertId();
+        return $entity;
     }
 
     public function findById(string $className, int $id): Entity | bool
@@ -73,7 +60,7 @@ class EntityManager
 
     public function remove(Entity $entity): bool|int
     {
-        $query = "DELET FROM {$entity->getTable()} WHERE id = {$entity->getId()}";
+        $query = "DELET FROM {$entity->getTable()} WHERE id = {$entity->id}";
         return $this->conn->exec($query);
     }
 }

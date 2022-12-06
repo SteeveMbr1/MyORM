@@ -4,18 +4,13 @@ namespace App\Entity;
 
 class Entity
 {
+    public int $id;
 
     protected string $table;
-    protected array $fields = [];
 
-    public function __construct(protected int $id = 0)
+    public function __construct()
     {
-        $this->generateTableName();
-    }
-
-    protected function generateTableName()
-    {
-        $this->table = array_slice(explode('\\', $this::class), -1)[0];
+        $this->generate_table_name();
     }
 
     /**
@@ -38,20 +33,32 @@ class Entity
 
     /**
      * Get the value of table
+     *
+     * @return string
      */
-    public function getTable()
+    public function getTable(): string
     {
         return $this->table;
     }
 
     /**
      * Set the value of table
+     *
+     * @param string $table
+     *
+     * @return self
      */
-    public function setTable($table): self
+    public function setTable(string $table): self
     {
         $this->table = $table;
 
         return $this;
+    }
+
+
+    protected function generate_table_name()
+    {
+        $this->table = array_slice(explode('\\', $this::class), -1)[0];
     }
 
     /**
@@ -59,33 +66,23 @@ class Entity
      *
      * @return array
      */
-    public function getFields(): array
+    public function getModelFields(): array
     {
-        return $this->fields;
-    }
+        $class_name = $this::class;
+        $fields     = [];
 
-    /**
-     * Set the value of fields
-     *
-     * @param array $fields
-     *
-     * @return self
-     */
-    public function setFields(array $fields): self
-    {
-        $this->fields = $fields;
-
-        return $this;
+        foreach (get_mangled_object_vars($this) as $key => $v) {
+            if (!str_contains($key, $class_name) && !str_contains($key, '*')) {
+                $prop = 'get' . $this->to_camel_case($key);
+                if (method_exists($this, $prop))
+                    $fields[$key] = $this->$prop();
+            }
+        }
+        return $fields;
     }
 
     private function to_camel_case(string $word)
     {
         return str_replace('_', '', ucwords($word, '_'));
-    }
-
-    public function __get($name)
-    {
-        $prop = 'get' . $this->to_camel_case($name);
-        return $this->$prop();
     }
 }
