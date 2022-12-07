@@ -16,36 +16,38 @@ $em = new EntityManager(DBConnexion::getConnexion());
 
 
 $post = new Post();
-$post->setName('First post')
-     ->setContent('Here is the content')
+$post->setName('Are you ready ?!')
+     ->setContent('Every body  !!!')
      ->setCreatedAt((new DateTime())->format(DateTime::RFC7231))
-     ->setIsOnline(false);
+     ->setIsOnline(true);
 
 $user = new User();
 $user->setLogin('log in')
      ->setPassword('My passWord');
 
 
-var_dump($post->getModelFields());
-var_dump($user->getModelFields());
-die;
 // CREATE new post in DB
-// $em->save($post);
-
+//$em->save($post);
 
 
 // READ post in DB
-$post = $em->findById(Post::class, 3);
-$post->setName('I change my mind')
-     ->setContent('Here why it\'s append')
+$post = $em->findById(Post::class, 12);
+
+$post->setName('I change all')
+     ->setContent('Here why it\'s append again')
      ->setCreatedAt((new DateTime())->format(DateTime::RFC7231))
      ->setIsOnline(true);
 
+$pts = new Post;
+$pts->setIsOnline(true);
+
+// To do : search with condition
+$posts = $em->findAll($pts);
+var_dump($posts);
+die;
 // UPDATE post in DB
 $em->save($post);
 
-var_dump($post);
-die;
 
 
 // DELETE

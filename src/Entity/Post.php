@@ -84,11 +84,11 @@ class Post extends Entity
     /**
      * Get the value of is_online
      *
-     * @return bool
+     * @return int
      */
-    public function getIsOnline(): bool
+    public function getIsOnline(): int
     {
-        return $this->is_online;
+        return (int) $this->is_online;
     }
 
     /**
