@@ -14,45 +14,29 @@ require './vendor/autoload.php';
 $em = new EntityManager(DBConnexion::getConnexion());
 
 
+// $user = $em->findById(User::class, 15);
+// print_r($user);
 
-$post = new Post();
-$post->setName('Are you ready ?!')
-     ->setContent('Every body  !!!')
-     ->setCreatedAt((new DateTime())->format(DateTime::RFC7231))
-     ->setIsOnline(true);
+$users = $em->findAll('App\Entity\User');
+print_r($users);
 
-$user = new User();
-$user->setLogin('log in')
-     ->setPassword('My passWord');
+$users = $em->findAll('App\Entity\User', ['id' => 1]);
+print_r($users);
 
+$posts = $em->findAll('App\Entity\Post', ['content' => '%here%']);
+print_r($posts);
 
-// CREATE new post in DB
-//$em->save($post);
+$post = new Post;
+$post->setName('%you%');
 
+$posts = $em->findAll($post);
+print_r($posts);
 
-// READ post in DB
-$post = $em->findById(Post::class, 12);
+$posts = $em->findAll($post, ['content' => '%yes%']);
+print_r($posts);
 
-$post->setName('I change all')
-     ->setContent('Here why it\'s append again')
-     ->setCreatedAt((new DateTime())->format(DateTime::RFC7231))
-     ->setIsOnline(true);
+$post = $posts[0];
+// Todo : Implement this
+$post->Author->getLogin();
 
-$pts = new Post;
-$pts->setIsOnline(true)
-     ->setContent("%content%");
-
-// To do : search with condition
-$cond = $pts->getModelFields();
-
-
-$posts = $em->findAll(Post::class, $cond);
-var_dump($posts);
 die;
-// UPDATE post in DB
-$em->save($post);
-
-
-
-// DELETE
-$em->remove($post);

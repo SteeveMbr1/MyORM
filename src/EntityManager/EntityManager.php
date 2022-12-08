@@ -4,6 +4,7 @@ namespace App\EntityManager;
 
 use App\Entity\Entity;
 use App\Entity\Post;
+use Exception;
 use PDO;
 use PDOException;
 
@@ -21,7 +22,7 @@ class EntityManager
 
     public function save(Entity $entity): Entity|null
     {
-        if (empty($entity->id))
+        if (!empty($entity->id))
             return $this->update($entity);
         return $this->create($entity);
     }
@@ -32,7 +33,7 @@ class EntityManager
         $modelfields = $entity->getModelFields();
         $fields = join(', ', array_keys($modelfields));
         $values = join(', :', array_keys($modelfields));
-        $query = "INSERT INTO {$entity->getTable()} ($fields) VALUES (:$values)";
+        $query = "INSERT INTO {$entity::getTable()} ($fields) VALUES (:$values)";
 
 
         $stmt = $this->conn->prepare($query);
@@ -48,10 +49,7 @@ class EntityManager
         $set = "";
         foreach ($modelfields as $key => $value) {
             if ($key != 'id')
-                if (is_string($value))
-                    $set .= "$key LIKE :$key, ";
-                else
-                    $set .= "$key = :$key, ";
+                $set .= "$key = :$key, ";
         }
         $set = rtrim($set, ', ');
 
@@ -62,36 +60,44 @@ class EntityManager
         return $entity;
     }
 
+
     /**
      * 
-     * @param string $className 
+     * @param string $entity must be an Entity inherited class
      * @param int $id 
      * @return Entity|bool 
+     * @throws Exception 
      * @throws PDOException 
      */
-    public function findById(string $className, int $id): Entity | bool
+    public function findById(string $entity, int $id): Entity | bool
     {
-        $entity = new $className();
-        $query = "SELECT * FROM {$entity->getTable()} WHERE id = :id";
+        !is_a($entity, Entity::class, true) &&
+            throw new \Exception("Error $entity is not an " . Entity::class . " type", 1);
+
+
+        $query = "SELECT * FROM {$entity::getTable()} WHERE id = :id";
         $stm = $this->conn->prepare($query);
-        $stm->setFetchMode(PDO::FETCH_CLASS, $className);
+        $stm->setFetchMode(PDO::FETCH_CLASS, $entity);
         $stm->execute(['id' => $id]);
         return $stm->fetch();
     }
 
 
+
     /**
      * 
-     * @param Entity $entity 
-     * @return array 
+     * @param Entity|string $entity can be an intance of Entity or it's class name 
+     * @param array $cond is an `key` => `value` array, where `key` is a `Entity` table field.
+     * @return array Returns an array containing all of the result set rows 
      * @throws PDOException 
      */
     public function findAll(Entity|string $entity, array $cond = []): array
     {
-        is_string($entity) && $entity = new $entity();
-        empty($cond) && $cond = $entity->getModelFields();
+        if (is_string($entity) && is_a($entity, Entity::class, true))
+            $entity = new $entity();
+        $cond = array_merge($cond, $entity->getModelFields());
 
-        $where = "";
+        $where = "1 AND ";
         foreach ($cond as $key => $value) {
             if (is_string($value))
                 $where .= "$key LIKE :$key AND ";
@@ -100,7 +106,7 @@ class EntityManager
         }
         $where = rtrim($where, 'AND ');
 
-        $query = "SELECT * FROM {$entity->getTable()} WHERE $where";
+        $query = "SELECT * FROM {$entity::getTable()} WHERE $where";
         $stm = $this->conn->prepare($query);
         $stm->setFetchMode(PDO::FETCH_CLASS, $entity::class);
         $stm->execute($cond);
@@ -109,7 +115,7 @@ class EntityManager
 
     public function remove(Entity $entity): bool|int
     {
-        $query = "DELET FROM {$entity->getTable()} WHERE id = {$entity->id}";
+        $query = "DELET FROM {$entity::getTable()} WHERE id = {$entity->id}";
         return $this->conn->exec($query);
     }
 }

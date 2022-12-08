@@ -6,11 +6,11 @@ class Entity
 {
     public int $id;
 
-    protected string $table;
+    static protected string $table;
 
     public function __construct()
     {
-        $this->generate_table_name();
+        static::$table = $this::generate_table_name();
     }
 
     /**
@@ -36,29 +36,27 @@ class Entity
      *
      * @return string
      */
-    public function getTable(): string
+    public static function getTable(): string
     {
-        return $this->table;
+        if (!isset(static::$table))
+            static::$table = static::generate_table_name();
+        return static::$table;
     }
 
     /**
      * Set the value of table
      *
      * @param string $table
-     *
-     * @return self
      */
-    public function setTable(string $table): self
+    public static function setTable(string $table)
     {
-        $this->table = $table;
-
-        return $this;
+        static::$table = $table;
     }
 
 
-    protected function generate_table_name()
+    protected static function generate_table_name(): string
     {
-        $this->table = array_slice(explode('\\', $this::class), -1)[0];
+        return array_slice(explode('\\', static::class), -1)[0];
     }
 
     /**

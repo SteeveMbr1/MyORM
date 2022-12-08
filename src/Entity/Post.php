@@ -4,10 +4,13 @@ namespace App\Entity;
 
 class Post extends Entity
 {
-    public string $name;
-    public string $content;
-    public string $created_at;
-    public bool   $is_online;
+    public string   $name;
+    public string   $content;
+    public string   $created_at;
+    public bool     $is_online;
+    public User|int $Author;
+
+    static protected string $table;
 
     /**
      * Get the value of name
@@ -101,6 +104,30 @@ class Post extends Entity
     public function setIsOnline(bool $is_online): self
     {
         $this->is_online = $is_online;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of Author
+     *
+     * @return User|int
+     */
+    public function getAuthor(): User|int
+    {
+        return $this->Author;
+    }
+
+    /**
+     * Set the value of Author
+     *
+     * @param User|int $Author
+     *
+     * @return self
+     */
+    public function setAuthor(User|int $Author): self
+    {
+        $this->Author = $Author;
 
         return $this;
     }
