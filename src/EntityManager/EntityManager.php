@@ -3,6 +3,7 @@
 namespace App\EntityManager;
 
 use App\Entity\Entity;
+use App\Entity\Post;
 use PDO;
 use PDOException;
 
@@ -45,9 +46,12 @@ class EntityManager
         // TODO :
         $modelfields = $entity->getModelFields();
         $set = "";
-        foreach ($modelfields as $key => $v) {
+        foreach ($modelfields as $key => $value) {
             if ($key != 'id')
-                $set .= "$key = :$key, ";
+                if (is_string($value))
+                    $set .= "$key LIKE :$key, ";
+                else
+                    $set .= "$key = :$key, ";
         }
         $set = rtrim($set, ', ');
 
@@ -82,15 +86,19 @@ class EntityManager
      * @return array 
      * @throws PDOException 
      */
-    public function findAll(Entity $entity, array $cond = []): array
+    public function findAll(Entity|string $entity, array $cond = []): array
     {
-        if (empty($cond))
-            $cond = $entity->getModelFields();
+        is_string($entity) && $entity = new $entity();
+        empty($cond) && $cond = $entity->getModelFields();
+
         $where = "";
-        foreach ($cond as $key => $v) {
-            $where .= "$key = :$key, ";
+        foreach ($cond as $key => $value) {
+            if (is_string($value))
+                $where .= "$key LIKE :$key AND ";
+            else
+                $where .= "$key = :$key AND ";
         }
-        $where = rtrim($where, ', ');
+        $where = rtrim($where, 'AND ');
 
         $query = "SELECT * FROM {$entity->getTable()} WHERE $where";
         $stm = $this->conn->prepare($query);

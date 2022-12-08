@@ -39,10 +39,14 @@ $post->setName('I change all')
      ->setIsOnline(true);
 
 $pts = new Post;
-$pts->setIsOnline(true);
+$pts->setIsOnline(true)
+     ->setContent("%content%");
 
 // To do : search with condition
-$posts = $em->findAll($pts);
+$cond = $pts->getModelFields();
+
+
+$posts = $em->findAll(Post::class, $cond);
 var_dump($posts);
 die;
 // UPDATE post in DB
