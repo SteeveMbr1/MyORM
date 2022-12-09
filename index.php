@@ -14,8 +14,8 @@ require './vendor/autoload.php';
 $em = new EntityManager(DBConnexion::getConnexion());
 
 
-// $user = $em->findById(User::class, 15);
-// print_r($user);
+$user = $em->findById(User::class, 15);
+print_r($user);
 
 $users = $em->findAll('App\Entity\User');
 print_r($users);
@@ -27,7 +27,7 @@ $posts = $em->findAll('App\Entity\Post', ['content' => '%here%']);
 print_r($posts);
 
 $post = new Post;
-$post->setName('%you%');
+$post->setTitle('%you%');
 
 $posts = $em->findAll($post);
 print_r($posts);
@@ -37,6 +37,8 @@ print_r($posts);
 
 $post = $posts[0];
 // Todo : Implement this
-$post->Author->getLogin();
+//$post->Author->getLogin();
+//$post->Author->findPost();
+//$post->Author->findPost(['name' => '%here%']);
 
 die;

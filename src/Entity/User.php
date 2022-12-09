@@ -7,7 +7,6 @@ class User extends Entity
     public string $login;
     public string $password;
 
-    static protected string $table;
 
     /**
      * Get the value of login

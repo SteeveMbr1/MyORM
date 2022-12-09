@@ -4,34 +4,33 @@ namespace App\Entity;
 
 class Post extends Entity
 {
-    public string   $name;
+    public string   $title;
     public string   $content;
     public string   $created_at;
     public bool     $is_online;
     public User|int $Author;
 
-    static protected string $table;
 
     /**
      * Get the value of name
      *
      * @return string
      */
-    public function getName(): string
+    public function getTitle(): string
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
      * Set the value of name
      *
-     * @param string $name
+     * @param string $title
      *
      * @return self
      */
-    public function setName(string $name): self
+    public function setTitle(string $title): self
     {
-        $this->name = $name;
+        $this->title = $title;
 
         return $this;
     }
@@ -87,11 +86,11 @@ class Post extends Entity
     /**
      * Get the value of is_online
      *
-     * @return int
+     * @return bool
      */
-    public function getIsOnline(): int
+    public function getIsOnline(): bool
     {
-        return (int) $this->is_online;
+        return $this->is_online;
     }
 
     /**
