@@ -3,7 +3,6 @@
 namespace App\EntityManager;
 
 use App\Entity\Entity;
-use App\Entity\Post;
 use Exception;
 use PDO;
 use PDOException;
@@ -11,13 +10,15 @@ use PDOException;
 class EntityManager
 {
 
+    static public PDO $conn;
 
     /**
      * @param PDO $conn 
      * @return void 
      */
-    public function __construct(public PDO $conn)
+    public function __construct(PDO $conn)
     {
+        static::$conn = $conn;
     }
 
     public function save(Entity $entity): Entity|null
@@ -36,9 +37,9 @@ class EntityManager
         $query = "INSERT INTO {$entity::getTable()} ($fields) VALUES (:$values)";
 
 
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this::$conn->prepare($query);
         $stmt->execute($modelfields);
-        $entity->id = $this->conn->lastInsertId();
+        $entity->id = $this::$conn->lastInsertId();
         return $entity;
     }
 
@@ -54,7 +55,7 @@ class EntityManager
         $set = rtrim($set, ', ');
 
         $query = "UPDATE {$entity->getTable()} SET $set WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
+        $stmt = $this::$conn->prepare($query);
         $stmt->execute($modelfields);
 
         return $entity;
@@ -76,7 +77,7 @@ class EntityManager
 
 
         $query = "SELECT * FROM {$entity::getTable()} WHERE id = :id";
-        $stm = $this->conn->prepare($query);
+        $stm = $this::$conn->prepare($query);
         $stm->setFetchMode(PDO::FETCH_CLASS, $entity);
         $stm->execute(['id' => $id]);
         return $stm->fetch();
@@ -107,7 +108,7 @@ class EntityManager
         $where = rtrim($where, 'AND ');
 
         $query = "SELECT * FROM {$entity::getTable()} WHERE $where";
-        $stm = $this->conn->prepare($query);
+        $stm = $this::$conn->prepare($query);
         $stm->setFetchMode(PDO::FETCH_CLASS, $entity::class);
         $stm->execute($cond);
         return $stm->fetchAll();
@@ -116,6 +117,20 @@ class EntityManager
     public function remove(Entity $entity): bool|int
     {
         $query = "DELET FROM {$entity::getTable()} WHERE id = {$entity->id}";
-        return $this->conn->exec($query);
+        return $this::$conn->exec($query);
+    }
+
+    static function getManager(string $classname)
+    {
+
+        if (is_a($classname, Entity::class, true)) {
+            $classname = explode('\\', $classname);
+
+            $classname = end($classname);
+            $classname = __NAMESPACE__ . '\\' . $classname . 'sManager';
+
+            if (is_a($classname, EntityManager::class, true))
+                return new $classname(static::$conn);
+        }
     }
 }

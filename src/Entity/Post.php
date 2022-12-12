@@ -8,7 +8,7 @@ class Post extends Entity
     public string   $content;
     public string   $created_at;
     public bool     $is_online;
-    public User|int $Author;
+    public User|int $author;
 
 
     /**

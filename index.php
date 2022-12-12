@@ -12,6 +12,10 @@ require './vendor/autoload.php';
 
 
 $em = new EntityManager(DBConnexion::getConnexion());
+$postsM = $em::getManager(Post::class);
+$posts = $postsM->findAll();
+var_dump($posts);
+die;
 
 
 $user = $em->findById(User::class, 15);
@@ -36,7 +40,9 @@ $posts = $em->findAll($post, ['content' => '%yes%']);
 print_r($posts);
 
 $post = $posts[0];
+
 // Todo : Implement this
+echo "Author : $post->author \n";
 //$post->Author->getLogin();
 //$post->Author->findPost();
 //$post->Author->findPost(['name' => '%here%']);
