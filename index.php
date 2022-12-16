@@ -10,11 +10,11 @@ require './vendor/autoload.php';
 
 
 
-
-$em = new EntityManager(DBConnexion::getConnexion());
+$db = new DBConnexion('src\Database\config.yml');
+$em = new EntityManager($db::getConnexion());
 $postsM = $em::getManager(Post::class);
 $posts = $postsM->findAll();
-var_dump($posts);
+// var_dump($posts);
 die;
 
 
@@ -34,13 +34,14 @@ $post = new Post;
 $post->setTitle('%you%');
 
 $posts = $em->findAll($post);
-print_r($posts);
+// print_r($posts);
 
 $posts = $em->findAll($post, ['content' => '%yes%']);
-print_r($posts);
+// print_r($posts);
 
 $post = $posts[0];
 
+echo gettype($post) . "\n";
 // Todo : Implement this
 echo "Author : $post->author \n";
 //$post->Author->getLogin();

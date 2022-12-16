@@ -1,0 +1,10 @@
+default:
+  SQLite:
+    path: src\Database\store.db
+
+other:
+  MySQL:
+    host: localhost
+    name: store_db
+    user: root
+    pswd: root

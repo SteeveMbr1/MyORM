@@ -14,7 +14,7 @@ class PostsManager extends EntityManager
         return parent::findAll($entity, $cond);
     }
 
-    public function findById(string $entity = Post::class, int $id): Entity|bool
+    public function findById(string $entity = Post::class, int $id = 0): Entity|bool
     {
         return parent::findById($entity, $id);
     }

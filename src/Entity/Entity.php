@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-class Entity
+abstract class Entity
 {
     public int $id;
 
