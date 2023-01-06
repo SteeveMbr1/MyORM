@@ -28,6 +28,11 @@ class EntityManager
         return $this->create($entity);
     }
 
+    /**
+     * @param Entity $entity 
+     * @return Entity 
+     * @throws PDOException 
+     */
     private function create(Entity $entity): Entity
     {
         // TODO : 
@@ -43,9 +48,13 @@ class EntityManager
         return $entity;
     }
 
+    /**
+     * @param Entity $entity 
+     * @return Entity 
+     * @throws PDOException 
+     */
     private function update(Entity $entity): Entity
     {
-        // TODO :
         $modelfields = $entity->getModelFields();
         $set = "";
         foreach ($modelfields as $key => $value) {
@@ -73,7 +82,7 @@ class EntityManager
     public function findById(string $entity, int $id): Entity | bool
     {
         !is_a($entity, Entity::class, true) &&
-            throw new \Exception("Error $entity is not an " . Entity::class . " type", 1);
+            throw new Exception("Error $entity is not an " . Entity::class . " type", 1);
 
 
         $query = "SELECT * FROM {$entity::getTable()} WHERE id = :id";

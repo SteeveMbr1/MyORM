@@ -3,18 +3,22 @@
 
 use App\Entity\User;
 use App\EntityManager\EntityManager;
-use App\Database\DBConnexion;
+use App\Database\DB;
 use App\Entity\Post;
 
 require './vendor/autoload.php';
 
+$db = DB::getConnexion();
+$em = new EntityManager($db);
 
+$pm = $em::getManager(Post::class);
+$posts = $pm->findAll();
+var_dump($posts);
 
-$db = new DBConnexion('src\Database\config.yml');
-$em = new EntityManager($db::getConnexion());
-$postsM = $em::getManager(Post::class);
-$posts = $postsM->findAll();
-// var_dump($posts);
+$post = $posts[0];
+
+var_dump($post->Author->id);
+
 die;
 
 
@@ -34,18 +38,7 @@ $post = new Post;
 $post->setTitle('%you%');
 
 $posts = $em->findAll($post);
-// print_r($posts);
+print_r($posts);
 
 $posts = $em->findAll($post, ['content' => '%yes%']);
-// print_r($posts);
-
-$post = $posts[0];
-
-echo gettype($post) . "\n";
-// Todo : Implement this
-echo "Author : $post->author \n";
-//$post->Author->getLogin();
-//$post->Author->findPost();
-//$post->Author->findPost(['name' => '%here%']);
-
-die;
+print_r($posts);

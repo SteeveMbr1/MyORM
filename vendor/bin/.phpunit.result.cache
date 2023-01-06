@@ -1,0 +1,1 @@
+{"version":1,"defects":{"DBConnexionTest::test_get_default":4,"DBTest::test_get_default":3},"times":{"DBConnexionTest::test_get_default":0.013,"DBTest::test_get_default":0.01,"DBTest::test_get_sqlite":0,"DBTest::test_get_mysql":0}}

@@ -8,7 +8,10 @@ class Post extends Entity
     public string   $content;
     public string   $created_at;
     public bool     $is_online;
-    public User|int $author;
+    public int      $author;
+    protected array $hasOne = [
+        'Author' => User::class
+    ];
 
 
     /**
@@ -110,11 +113,11 @@ class Post extends Entity
     /**
      * Get the value of Author
      *
-     * @return User|int
+     * @return int
      */
     public function getAuthor(): User|int
     {
-        return $this->Author;
+        return $this->author;
     }
 
     /**
@@ -124,9 +127,9 @@ class Post extends Entity
      *
      * @return self
      */
-    public function setAuthor(User|int $Author): self
+    public function setAuthor(int $author): self
     {
-        $this->Author = $Author;
+        $this->author = $author;
 
         return $this;
     }

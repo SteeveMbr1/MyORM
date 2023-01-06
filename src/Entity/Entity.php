@@ -2,9 +2,13 @@
 
 namespace App\Entity;
 
+use function PHPUnit\Framework\arrayHasKey;
+
 abstract class Entity
 {
-    public int $id;
+    public    int   $id;
+
+    protected array $hasOne;
 
     static protected string $table;
 
@@ -82,5 +86,17 @@ abstract class Entity
     private function to_camel_case(string $word)
     {
         return str_replace('_', '', ucwords($word, '_'));
+    }
+
+    public function __get($name)
+    {
+
+        if (array_key_exists($name, $this->hasOne)) {
+            $prop = new $this->hasOne[$name]();
+            $attri = "get$name";
+            $prop->setId($this->$attri());
+            return $prop;
+        }
+        return null;
     }
 }
