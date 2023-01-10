@@ -18,11 +18,6 @@ class DB
      */
     protected static array $config;
 
-    /** @return void  */
-    public function __construct()
-    {
-        self::loadConfig();
-    }
 
     static private function loadConfig(): void
     {
@@ -32,9 +27,13 @@ class DB
 
     static private function newConnexion(string $name): void
     {
-        $call = "from_" . self::$config[$name]['driver'];
 
-        self::$connexions[$name] = self::$call(self::$config[$name]);
+        $connexion = match (self::$config[$name]['driver']) {
+            'sqlite' => self::from_sqlite(self::$config[$name]),
+            'mysql'  => self::from_mysql(self::$config[$name]),
+        };
+
+        self::$connexions[$name] = $connexion;
     }
 
     static public function getConnexion(string $name = 'default')
