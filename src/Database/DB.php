@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Database;
+namespace MyORM\Database;
 
 use PDO;
 
@@ -18,44 +18,42 @@ class DB
      */
     protected static array $config;
 
-
-    static private function loadConfig(): void
+    static public function init(string $config_file): static
     {
-        if (empty(self::$config))
-            self::$config = require_once '.\config\database.php';
+        self::$connexions = [];
+        self::$config = require $config_file;
+        return new static;
+    }
+
+    static public function getConnexion(string $name = 'default')
+    {
+        if ($name == 'default')
+            $name = self::$config['default'];
+
+        if (!isset(self::$config[$name]))
+            throw new \Exception("Error: The '$name' connexion does not exist", 1);
+
+        isset(self::$connexions[$name]) || self::newConnexion($name);
+        return self::$connexions[$name];
     }
 
     static private function newConnexion(string $name): void
     {
 
         $connexion = match (self::$config[$name]['driver']) {
-            'sqlite' => self::from_sqlite(self::$config[$name]),
-            'mysql'  => self::from_mysql(self::$config[$name]),
+            'sqlite' => self::load_sqlite_connexion(self::$config[$name]),
+            'mysql'  => self::load_mysql_connexion(self::$config[$name]),
         };
 
         self::$connexions[$name] = $connexion;
     }
 
-    static public function getConnexion(string $name = 'default')
-    {
-        self::loadConfig();
-
-        if ($name == 'default')
-            $name = self::$config['default'];
-
-        if (!isset(self::$config[$name]))
-            throw new \Exception("Error the '$name' connexion does not exist", 1);
-
-        isset(self::$connexions[$name]) || self::newConnexion($name);
-        return self::$connexions[$name];
-    }
-
-    private static function from_sqlite(array $config)
+    private static function load_sqlite_connexion(array $config)
     {
         return new PDO("sqlite:" . $config['file']);
     }
 
-    private static function from_mysql(array $config)
+    private static function load_mysql_connexion(array $config)
     {
         $host = $config['host'];
         $dbname = $config['dbname'];

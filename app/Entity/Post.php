@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use MyORM\Entity\Entity;
+
 class Post extends Entity
 {
     public string   $title;
@@ -9,6 +11,7 @@ class Post extends Entity
     public string   $created_at;
     public bool     $is_online;
     public int      $author;
+
     protected array $hasOne = [
         'Author' => User::class
     ];

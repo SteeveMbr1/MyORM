@@ -16,14 +16,14 @@ class ComposerStaticInitf3356dfa5f696fe33f46a7a7d5e28071
         array (
             'PhpParser\\' => 10,
         ),
+        'M' => 
+        array (
+            'MyORM\\' => 6,
+        ),
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
             'DeepCopy\\' => 9,
-        ),
-        'C' => 
-        array (
-            'Config\\' => 7,
         ),
         'A' => 
         array (
@@ -36,6 +36,10 @@ class ComposerStaticInitf3356dfa5f696fe33f46a7a7d5e28071
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
+        'MyORM\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
         'Doctrine\\Instantiator\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
@@ -44,13 +48,9 @@ class ComposerStaticInitf3356dfa5f696fe33f46a7a7d5e28071
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-        'Config\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/config',
-        ),
         'App\\' => 
         array (
-            0 => __DIR__ . '/../..' . '/src',
+            0 => __DIR__ . '/../..' . '/app',
         ),
     );
 

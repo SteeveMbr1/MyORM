@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Entity;
-
-use function PHPUnit\Framework\arrayHasKey;
+namespace MyORM\Entity;
 
 abstract class Entity
 {

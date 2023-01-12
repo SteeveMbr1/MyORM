@@ -3,8 +3,8 @@
     "description": "Test of Entity and EntityManager Modeling",
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "Config\\": "config/"
+            "App\\": "app/",
+            "MyORM\\": "src/"
         }
     },
     "require-dev": {
