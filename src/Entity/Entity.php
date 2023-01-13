@@ -2,17 +2,21 @@
 
 namespace MyORM\Entity;
 
+use MyORM\Traits\ClassTrait;
+
 abstract class Entity
 {
-    public    int   $id;
+    use ClassTrait;
+
+    public int $id;
 
     protected array $hasOne;
 
-    static protected string $table;
+    protected string $table;
 
     public function __construct()
     {
-        static::$table = $this::generate_table_name();
+        $this->table = $this::generate_table_name();
     }
 
     /**

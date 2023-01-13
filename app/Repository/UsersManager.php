@@ -11,7 +11,7 @@ class UsersManager extends RepositoryManager
 {
     protected string $table = 'User_';
 
-    public function __construct(protected PDO $db)
-    {
-    }
+    // public function __construct(protected PDO $db)
+    // {
+    // }
 }

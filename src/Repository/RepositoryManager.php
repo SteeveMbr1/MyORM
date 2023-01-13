@@ -11,11 +11,11 @@ class RepositoryManager
 
     public function __construct(
         protected PDO $db,
-        protected string $table = '',
-        protected string $entity = ''
+        protected string $entity,
+        protected string $table = ''
     ) {
-        if ($this->entity !== '')
-            $this->entity = $this->generateEntity();
+        if ($this->table !== '')
+            $this->table = $this->generateTable();
     }
 
     public function generateEntity()
