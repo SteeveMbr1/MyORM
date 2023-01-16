@@ -18,28 +18,31 @@ class DB
      */
     protected static array $config;
 
-    static public function init(string $config_file): static
+    public function __construct(string $config_file)
     {
         self::$connexions = [];
-        self::$config = require $config_file;
-        return new static;
+        self::$config = require $config_file ?? null;
     }
 
-    static public function getConnexion(string $name = 'default')
+    public static function init(string $config_file)
     {
-        if ($name == 'default')
-            $name = self::$config['default'];
+        return new static($config_file);
+    }
+
+    public static function getConnexion(?string $name = null)
+    {
+        $name = $name ?? self::$config['default'];
 
         if (!isset(self::$config[$name]))
             throw new \Exception("Error: The '$name' connexion does not exist", 1);
 
-        isset(self::$connexions[$name]) || self::newConnexion($name);
+        if (!isset(self::$connexions[$name]))
+            self::load_new_connexion($name);
         return self::$connexions[$name];
     }
 
-    static private function newConnexion(string $name): void
+    private static function load_new_connexion(string $name): void
     {
-
         $connexion = match (self::$config[$name]['driver']) {
             'sqlite' => self::load_sqlite_connexion(self::$config[$name]),
             'mysql'  => self::load_mysql_connexion(self::$config[$name]),

@@ -9,13 +9,14 @@ class RepositoryManager
 {
     use ClassTrait;
 
+
     public function __construct(
         protected PDO $db,
-        protected string $entity,
-        protected string $table = ''
+        protected ?string $entity = null,
+        protected ?string $table = null,
     ) {
-        if ($this->table !== '')
-            $this->table = $this->generateTable();
+        $this->table = $table ?? $this->generateTable();
+        $this->entity = $entity ?? $this->generateEntity();
     }
 
     public function generateEntity()

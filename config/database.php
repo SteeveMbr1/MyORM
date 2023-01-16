@@ -5,7 +5,7 @@ return [
 
     'SQLite' => [
         'driver'    => 'sqlite',
-        'file'      => 'src\Database\store.db'
+        'file'      => 'storage\store.db'
     ],
 
     'MySQL' => [

@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 final class RepositoryManagerTest extends TestCase
 {
-    protected $db;
+    protected PDO $db;
 
     public function setUp(): void
     {

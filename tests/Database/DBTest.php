@@ -1,26 +1,22 @@
 <?php
 
-use App\Database\DB;
+use MyORM\Database\DB;
 use PHPUnit\Framework\TestCase;
 
 final class DBTest extends TestCase
 {
+    public PDO $db;
 
-    public function test_get_default(): void
+    public function setUp(): void
     {
-        $db = DB::getConnexion();
-        $this->assertEquals('sqlite:src\Database\store.db', $db);
+        new DB('config\database.php');
+        $this->db = DB::getConnexion();
     }
 
-    public function test_get_sqlite(): void
+    public function test_connexion()
     {
-        $db = DB::getConnexion("SQLite");
-        $this->assertEquals('sqlite:src\Database\store.db', $db);
-    }
-
-    public function test_get_mysql(): void
-    {
-        $db = DB::getConnexion("MySQL");
-        $this->assertEquals('mysql:host=localhost;dbname=store_db;charset=utf8mb4, root, root', $db);
+        $stm = $this->db->query("SELECT 'Hello World'");
+        $res = $stm->fetchColumn();
+        $this->assertEquals('Hello World', $res);
     }
 }
