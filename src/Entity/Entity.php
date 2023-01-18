@@ -12,12 +12,6 @@ abstract class Entity
 
     protected array $hasOne;
 
-    protected string $table;
-
-    public function __construct()
-    {
-        $this->table = $this::generate_table_name();
-    }
 
     /**
      * Get the value of id
@@ -37,36 +31,9 @@ abstract class Entity
         return $this;
     }
 
-    /**
-     * Get the value of table
-     *
-     * @return string
-     */
-    public static function getTable(): string
-    {
-        if (!isset(static::$table))
-            static::$table = static::generate_table_name();
-        return static::$table;
-    }
 
     /**
-     * Set the value of table
-     *
-     * @param string $table
-     */
-    public static function setTable(string $table)
-    {
-        static::$table = $table;
-    }
-
-
-    protected static function generate_table_name(): string
-    {
-        return array_slice(explode('\\', static::class), -1)[0];
-    }
-
-    /**
-     * Get the value of fields
+     * Get the value of fields associetes to the table 
      *
      * @return array
      */

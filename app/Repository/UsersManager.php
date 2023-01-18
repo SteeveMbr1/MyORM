@@ -9,9 +9,6 @@ use PDO;
 
 class UsersManager extends RepositoryManager
 {
-    protected string $table = 'User_';
-
-    // public function __construct(protected PDO $db)
-    // {
-    // }
+    protected ?string $table  = 'User';
+    protected ?string $entity = User::class;
 }

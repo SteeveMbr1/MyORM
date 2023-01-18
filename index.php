@@ -1,5 +1,6 @@
 <?php
 
+use App\Repository\UsersManager;
 use MyORM\Database\DB;
 
 require './vendor/autoload.php';
@@ -8,6 +9,6 @@ new DB('config\database.php');
 
 $db = DB::getConnexion();
 
-$stm = $db->query("SELECT 'Hello world'");
+$um = new UsersManager($db);
 
-print_r($stm->fetchColumn());
+var_dump($um);
